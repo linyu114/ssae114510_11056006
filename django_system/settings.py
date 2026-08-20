@@ -19,11 +19,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # 🔑 基本設定
 # ========================
 
-SECRET_KEY = 'django-insecure-$fdia7icb&ji2k_6aof1b)s#ozo^kvo9%9@#o@23z+x(ki+r)j'
+def env_bool(name, default=False):
+    return os.getenv(name, str(default)).strip().lower() in ('1', 'true', 'yes', 'on')
 
-DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '*']
+def env_list(name, default=''):
+    return [item.strip() for item in os.getenv(name, default).split(',') if item.strip()]
+
+
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-dev-only-change-me')
+
+DEBUG = env_bool('DJANGO_DEBUG', True)
+
+ALLOWED_HOSTS = env_list('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost')
 
 
 # ========================
@@ -99,11 +107,11 @@ WSGI_APPLICATION = 'django_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': '114-510',
-        'USER': '114510',
-        'PASSWORD': '@!LL51o@',
-        'HOST': '140.131.114.242',
-        'PORT': '3306',
+        'NAME': os.getenv('DB_NAME', '114-510'),
+        'USER': os.getenv('DB_USER', '114510'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', '140.131.114.242'),
+        'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
             'charset': 'utf8mb4',
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -150,13 +158,16 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_CLIENT_ID', 'fallback-key')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', 'fallback-secret')
 
 # 部署環境的重新導向 URI (應與 Google Cloud Console 一致)
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://ntubssae.dpdns.org/auth/complete/google-oauth2/' 
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = os.getenv(
+    'GOOGLE_OAUTH2_REDIRECT_URI',
+    'http://127.0.0.1:8000/auth/complete/google-oauth2/',
+)
 
 
-# 啟用 Cookie 安全性 (假設您使用 HTTPS)
+# 啟用 Cookie 安全性（透過 Cloudflare Tunnel / Nginx 等 HTTPS 反向代理時生效）
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_COOKIE_SECURE = True   
-SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
 
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
@@ -191,12 +202,10 @@ SOCIAL_AUTH_PIPELINE = (
 # 🌍 CSRF / Locale
 # ========================
 # 確保包含所有協議和網域，特別是部署環境的 HTTPS
-CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:8000',
-    'http://localhost:8000',
-    'http://ntubssae.dpdns.org',
-    'https://ntubssae.dpdns.org',
-]
+CSRF_TRUSTED_ORIGINS = env_list(
+    'DJANGO_CSRF_TRUSTED_ORIGINS',
+    'http://127.0.0.1:8000,http://localhost:8000',
+)
 
 
 LANGUAGE_CODE = 'zh-hant'
@@ -335,9 +344,9 @@ EMAIL_PORT = 587
 
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = "ntubimd114510@gmail.com"
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "ntubimd114510@gmail.com")
 
-EMAIL_HOST_PASSWORD = "lodw hjdb tjmm qmdv"
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 
 DEFAULT_FROM_EMAIL = "智能校事專家 <ntubimd114510@gmail.com>"
 
