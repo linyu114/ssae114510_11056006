@@ -72,8 +72,8 @@ class ClassScheduleScraper extends NTUBScraper {
                     'B',  // 第十節
                     'C',  // 第十一節
                     'D',  // 第十二節
-                    'D',  // 第十三節（暫時沿用，若有需要可再細分）
-                    'D'   // 第十四節
+                    'E',  // 第十三節
+                    'F'   // 第十四節
                 ];
 
                 // 從第 2 列開始（index 1）為實際課表內容
@@ -291,25 +291,24 @@ class ClassScheduleScraper extends NTUBScraper {
      */
     formatScheduleForDatabase(scheduleData, semester, userId) {
         return scheduleData.map(course => {
-            // 將節次轉換為時間範圍
-            // 這裡需要根據學校的節次時間表來調整
+            // 將節次轉換為時間範圍（依北商校務系統公告之節次時間）
             const parseTime = (period) => {
-                // 範例：將節次轉換為時間
-                // 實際轉換邏輯需要根據學校的節次時間表調整
                 const periodMap = {
                     '1': { start: '08:10', end: '09:00' },
                     '2': { start: '09:10', end: '10:00' },
                     '3': { start: '10:10', end: '11:00' },
                     '4': { start: '11:10', end: '12:00' },
                     'N': { start: '12:10', end: '13:00' }, // 午休時間
-                    '5': { start: '13:10', end: '14:00' },
-                    '6': { start: '14:10', end: '15:00' },
-                    '7': { start: '15:10', end: '16:00' },
-                    '8': { start: '16:10', end: '17:00' },
-                    'A': { start: '17:10', end: '18:00' },
+                    '5': { start: '13:30', end: '14:20' },
+                    '6': { start: '14:25', end: '15:15' },
+                    '7': { start: '15:25', end: '16:15' },
+                    '8': { start: '16:20', end: '17:10' },
+                    'A': { start: '17:15', end: '18:05' },
                     'B': { start: '18:10', end: '19:00' },
-                    'C': { start: '19:10', end: '20:00' },
-                    'D': { start: '20:10', end: '21:00' },
+                    'C': { start: '18:30', end: '19:15' },
+                    'D': { start: '19:20', end: '20:05' },
+                    'E': { start: '20:15', end: '21:00' },
+                    'F': { start: '21:05', end: '21:50' },
                 };
 
                 const periodInfo = periodMap[period] || { start: '00:00', end: '00:00' };
