@@ -24,8 +24,7 @@
   table.schedule-table { border-collapse:collapse; width:100%; min-width:720px; font-size:13px; table-layout:fixed; }
   table.schedule-table th, table.schedule-table td { border:1px solid #e5e7eb; padding:8px 8px; text-align:center; vertical-align:top; }
   table.schedule-table th { background:#7e6a8a; font-weight:600; color:#fff; }
-  table.schedule-table td.period-cell { background:#f5f3f7; font-weight:600; width:80px; white-space:pre-line; color:#4b3c59; }
-  .course-cell { font-size:12px; line-height:1.5; padding:4px 4px; border-radius:8px; transition:background-color .15s ease, transform .1s ease; background:#f9f8fa; }
+  table.schedule-table td.period-cell { background:#f5f3f7; font-weight:600; width:72px; min-width:72px; max-width:72px; font-size:12px; line-height:1.35; white-space:pre-line; color:#4b3c59; }  .course-cell { font-size:12px; line-height:1.5; padding:4px 4px; border-radius:8px; transition:background-color .15s ease, transform .1s ease; background:#f9f8fa; }
   .course-cell:hover { background:#e9e4ee; transform:translateY(-1px); }
   .course-name { font-weight:650; margin-bottom:2px; color:#111827; }
   .course-meta { color:#4b5563; font-size:11px; }
@@ -291,15 +290,35 @@ document.head.appendChild(modalStyle);
     '09:10-10:00',
     '10:10-11:00',
     '11:10-12:00',
-    '13:10-14:00',
-    '14:10-15:00',
-    '15:10-16:00',
-    '16:10-17:00',
-    '17:10-18:00',
-    '18:10-19:00',
-    '19:10-20:00',
-    '20:10-21:00'
+    '12:01-13:30',
+    '13:30-14:20',
+    '14:25-15:15',
+    '15:25-16:15',
+    '16:20-17:10',
+    '17:15-18:05',
+    '18:06-18:29',
+    '18:30-19:15',
+    '19:20-20:05',
+    '20:15-21:00',
+    '21:05-21:50'
   ];
+  const PERIOD_NAMES = {
+    '08:10-09:00': '第一節',
+    '09:10-10:00': '第二節',
+    '10:10-11:00': '第三節',
+    '11:10-12:00': '第四節',
+    '12:01-13:30': '午休',
+    '13:30-14:20': '第五節',
+    '14:25-15:15': '第六節',
+    '15:25-16:15': '第七節',
+    '16:20-17:10': '第八節',
+    '17:15-18:05': '第九節',
+    '18:06-18:29': '第十節',
+    '18:30-19:15': '第十一節',
+    '19:20-20:05': '第十二節',
+    '20:15-21:00': '第十三節',
+    '21:05-21:50': '第十四節'
+  };
 
   function buildScheduleGrid(courses) {
     const grid = {};
@@ -333,7 +352,8 @@ document.head.appendChild(modalStyle);
       const tdPeriod = document.createElement('td');
       tdPeriod.className = 'period-cell';
       const parts = pkey.split('-');
-      tdPeriod.textContent = (parts[0] || '') + '\n' + (parts[1] || '');
+      const periodName = PERIOD_NAMES[pkey] || '';
+      tdPeriod.textContent = (periodName ? periodName + '\n' : '') + (parts[0] || '') + '\n' + (parts[1] || '');
       tr.appendChild(tdPeriod);
 
       for (let day = 1; day <= 7; day++) {

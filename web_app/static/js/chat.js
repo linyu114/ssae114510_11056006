@@ -632,7 +632,7 @@ async function ensureConversationReady() {
   }
 
   // 已登入 → 建立一個新對話（沿用你的 API）
-  if (window.IS_AUTH && typeof fetch === 'function') {
+if (typeof fetch === 'function') {
     try {
       const title = `新對話${(window.conversations?.length || 0) + 1}`;
       const res = await fetch("/api/conversations/", {
@@ -1255,11 +1255,7 @@ function showPDFModal(pdfUrl, filename) {
         // 有對話 → 選第一個
         selectConvo(conversations[0].id);
     } else {
-        if (window.IS_AUTH) {
-            // 登入使用者 → 自動新建一個對話
-            await createNewChat();
-        }
-        // 否則：訪客 → 保持 renderConvos() 的提示
+        await createNewChat();
     }
     
     // 默認收起側邊欄，無論窗口大小

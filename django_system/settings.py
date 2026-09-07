@@ -150,7 +150,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_CLIENT_ID', 'fallback-key')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', 'fallback-secret')
 
 # 部署環境的重新導向 URI (應與 Google Cloud Console 一致)
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://ntubssae.dpdns.org/auth/complete/google-oauth2/' 
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'https://swampland-marlin-hertz.ngrok-free.dev/auth/complete/google-oauth2/'
 
 
 # 啟用 Cookie 安全性 (假設您使用 HTTPS)
@@ -196,6 +196,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://ntubssae.dpdns.org',
     'https://ntubssae.dpdns.org',
+    'https://swampland-marlin-hertz.ngrok-free.dev',
 ]
 
 
